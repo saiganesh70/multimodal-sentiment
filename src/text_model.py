@@ -1,4 +1,5 @@
 import pandas as pd, numpy as np, torch
+from tqdm import tqdm
 from torch.utils.data import Dataset, DataLoader
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from sklearn.metrics import accuracy_score, f1_score
@@ -16,7 +17,7 @@ class TextDS(Dataset):
         self.tok = tok
     def __len__(self): return len(self.y)
     def __getitem__(self, i):
-        enc = self.tok(self.texts[i], truncation=True, max_length=64,
+        enc = self.tok(self.texts[i], truncation=True, max_length=48,
                        padding="max_length", return_tensors="pt")
         item = {k: v.squeeze(0) for k, v in enc.items()}
         item["labels"] = torch.tensor(self.y[i])
@@ -42,9 +43,9 @@ if __name__ == "__main__":
 
     opt = torch.optim.AdamW(model.parameters(), lr=2e-5)
     best = 0
-    for epoch in range(4):
+    for epoch in range(2):
         model.train()
-        for b in train:
+        for b in tqdm(train, desc=f"epoch {epoch+1}"):
             b = {k: v.to(device) for k, v in b.items()}
             loss = model(**b).loss
             loss.backward(); opt.step(); opt.zero_grad()
