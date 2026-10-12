@@ -2,9 +2,10 @@
 title: Multimodal Sentiment (MELD)
 emoji: 🎭
 sdk: gradio
-sdk_version: 4.44.0
+sdk_version: 6.30.0
+python_version: "3.12"
 app_file: app.py
---- 
+---
 # Multimodal Sentiment Engine (MELD)
 
 Sentiment classification (negative / neutral / positive) of TV dialogue using text, audio and video, plus an ablation of late fusion.
